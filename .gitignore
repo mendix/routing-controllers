@@ -32,11 +32,6 @@ $RECYCLE.BIN/
 *.sublime-project
 *.sublime-workspace
 
-# IDE - VSCode
-.vscode/**
-!.vscode/tasks.json
-!.vscode/launch.json
-
 # IDE - IntelliJ
 .idea
 
