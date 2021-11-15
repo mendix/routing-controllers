@@ -1,0 +1,33 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": true,
+  "files.eol": "\n",
+  "files.trimTrailingWhitespace": true,
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/data/**": true,
+    "**/dist/**": true,
+    "**/src-gen/**": true,
+    "**/xtend-gen/**": true,
+    "**/target/**": true,
+  },
+  "search.exclude": {
+    "**/coverage": true,
+    "**/custom_typedoc_theme": true,
+    "**/data": true,
+    "**/dist": true,
+    "**/node_modules": true,
+    "**/src-gen": true,
+    "**/xtend-gen": true
+  },
+  "typescript.tsdk": "./node_modules/typescript/lib",
+
+  // Necessary to enable prettier on save. Disable in user settings to prevent this.
+  "[typescript]": {
+    "editor.formatOnSave": true
+  },
+}
