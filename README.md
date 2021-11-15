@@ -1,11 +1,13 @@
+> **IMPORTANT NOTE!**
+>
+> This repository is a fork of the original [`routing-controllers`](https://github.com/typestack/routing-controllers) package.
+
 # routing-controllers
 
 ![Build Status](https://github.com/typestack/routing-controllers/workflows/CI/badge.svg)
 [![codecov](https://codecov.io/gh/typestack/routing-controllers/branch/develop/graph/badge.svg)](https://codecov.io/gh/typestack/routing-controllers)
 [![npm version](https://badge.fury.io/js/routing-controllers.svg)](https://badge.fury.io/js/routing-controllers)
 [![Dependency Status](https://david-dm.org/typestack/routing-controllers.svg)](https://david-dm.org/typestack/routing-controllers)
-
-English | [中文](./docs/lang/chinese/README.md)
 
 Allows to create controller classes with methods as actions that handle requests.
 You can use routing-controllers with [express.js][1] or [koa.js][2].
