@@ -4,15 +4,13 @@
     "useTabs": false,
     "overrides": [
         {
-            "files": [
-                "*.json",
-                "*.yml"
-            ],
+            "files": ["*.json", "*.yml"],
             "options": {
                 "tabWidth": 2
             }
         }
     ],
     "trailingComma": "none",
-    "arrowParens": "avoid"
+    "arrowParens": "avoid",
+    "endOfLine": "lf"
 }
