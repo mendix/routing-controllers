@@ -1,491 +1,491 @@
-import { Server as HttpServer } from 'http';
-import HttpStatusCodes from 'http-status-codes';
-import { Container, Service } from 'typedi';
-import { Get } from '../../src/decorator/Get';
-import { JsonController } from '../../src/decorator/JsonController';
-import { createExpressServer, getMetadataArgsStorage } from '../../src/index';
-import { useContainer } from '../../src/util/container';
-import { axios } from '../utilities/axios';
+import { Server as HttpServer } from "http";
+import HttpStatusCodes from "http-status-codes";
+import { Container, Service } from "typedi";
+import { Get } from "../../src/decorator/Get";
+import { JsonController } from "../../src/decorator/JsonController";
+import { createExpressServer, getMetadataArgsStorage } from "../../src/index";
+import { useContainer } from "../../src/util/container";
+import { axios } from "../utilities/axios";
 import DoneCallback = jest.DoneCallback;
 
 describe(``, () => {
-  let expressServer: HttpServer;
+    let expressServer: HttpServer;
 
-  describe('using typedi container should be possible', () => {
-    beforeEach((done: DoneCallback) => {
-      // reset metadata args storage
-      useContainer(Container);
-      getMetadataArgsStorage().reset();
+    describe("using typedi container should be possible", () => {
+        beforeEach((done: DoneCallback) => {
+            // reset metadata args storage
+            useContainer(Container);
+            getMetadataArgsStorage().reset();
 
-      @Service()
-      class QuestionRepository {
-        findQuestions(): any[] {
-          return [
-            {
-              id: 1,
-              title: 'question #1',
-            },
-            {
-              id: 2,
-              title: 'question #2',
-            },
-          ];
-        }
-      }
+            @Service()
+            class QuestionRepository {
+                findQuestions(): any[] {
+                    return [
+                        {
+                            id: 1,
+                            title: "question #1"
+                        },
+                        {
+                            id: 2,
+                            title: "question #2"
+                        }
+                    ];
+                }
+            }
 
-      @Service()
-      class PostRepository {
-        findPosts(): any[] {
-          return [
-            {
-              id: 1,
-              title: 'post #1',
-            },
-            {
-              id: 2,
-              title: 'post #2',
-            },
-          ];
-        }
-      }
+            @Service()
+            class PostRepository {
+                findPosts(): any[] {
+                    return [
+                        {
+                            id: 1,
+                            title: "post #1"
+                        },
+                        {
+                            id: 2,
+                            title: "post #2"
+                        }
+                    ];
+                }
+            }
 
-      @Service()
-      @JsonController()
-      class TestContainerController {
-        private questionRepository: QuestionRepository = new QuestionRepository();
-        private postRepository: PostRepository = new PostRepository();
+            @Service()
+            @JsonController()
+            class TestContainerController {
+                private questionRepository: QuestionRepository = new QuestionRepository();
+                private postRepository: PostRepository = new PostRepository();
 
-        @Get('/questions')
-        questions(): any[] {
-          return this.questionRepository.findQuestions();
-        }
+                @Get("/questions")
+                questions(): any[] {
+                    return this.questionRepository.findQuestions();
+                }
 
-        @Get('/posts')
-        posts(): any[] {
-          return this.postRepository.findPosts();
-        }
-      }
+                @Get("/posts")
+                posts(): any[] {
+                    return this.postRepository.findPosts();
+                }
+            }
 
-      expressServer = createExpressServer().listen(3001, done);
+            expressServer = createExpressServer().listen(3001, done);
+        });
+
+        afterEach((done: DoneCallback) => {
+            useContainer(undefined);
+            expressServer.close(done);
+        });
+
+        it("typedi container", async () => {
+            expect.assertions(4);
+            let response;
+
+            try {
+                response = await axios.get("/questions");
+                expect(response.status).toEqual(HttpStatusCodes.OK);
+                expect(response.data).toEqual([
+                    {
+                        id: 1,
+                        title: "question #1"
+                    },
+                    {
+                        id: 2,
+                        title: "question #2"
+                    }
+                ]);
+
+                response = await axios.get("/posts");
+                expect(response.status).toEqual(HttpStatusCodes.OK);
+                expect(response.data).toEqual([
+                    {
+                        id: 1,
+                        title: "post #1"
+                    },
+                    {
+                        id: 2,
+                        title: "post #2"
+                    }
+                ]);
+            } catch (err) {
+                console.log(err);
+            }
+        });
     });
 
-    afterEach((done: DoneCallback) => {
-      useContainer(undefined);
-      expressServer.close(done);
+    describe("using custom container should be possible", () => {
+        beforeEach((done: DoneCallback) => {
+            const fakeContainer = {
+                services: [] as any,
+
+                get(service: any): any {
+                    if (!this.services[service.name]) {
+                        this.services[service.name] = new service();
+                    }
+
+                    return this.services[service.name];
+                }
+            };
+
+            class QuestionRepository {
+                findQuestions(): any[] {
+                    return [
+                        {
+                            id: 1,
+                            title: "question #1"
+                        },
+                        {
+                            id: 2,
+                            title: "question #2"
+                        }
+                    ];
+                }
+            }
+
+            class PostRepository {
+                findPosts(): any[] {
+                    return [
+                        {
+                            id: 1,
+                            title: "post #1"
+                        },
+                        {
+                            id: 2,
+                            title: "post #2"
+                        }
+                    ];
+                }
+            }
+
+            // reset metadata args storage
+            useContainer(fakeContainer);
+            getMetadataArgsStorage().reset();
+
+            @JsonController()
+            class TestContainerController {
+                private questionRepository: QuestionRepository = new QuestionRepository();
+                private postRepository: PostRepository = new PostRepository();
+
+                @Get("/questions")
+                questions(): any[] {
+                    return this.questionRepository.findQuestions();
+                }
+
+                @Get("/posts")
+                posts(): any[] {
+                    return this.postRepository.findPosts();
+                }
+            }
+
+            expressServer = createExpressServer().listen(3001, done);
+        });
+
+        afterEach((done: DoneCallback) => {
+            useContainer(undefined);
+            expressServer.close(done);
+        });
+
+        it("custom container", async () => {
+            expect.assertions(4);
+            let response;
+
+            try {
+                response = await axios.get("/questions");
+                expect(response.status).toEqual(HttpStatusCodes.OK);
+                expect(response.data).toEqual([
+                    {
+                        id: 1,
+                        title: "question #1"
+                    },
+                    {
+                        id: 2,
+                        title: "question #2"
+                    }
+                ]);
+
+                response = await axios.get("/posts");
+                expect(response.status).toEqual(HttpStatusCodes.OK);
+                expect(response.data).toEqual([
+                    {
+                        id: 1,
+                        title: "post #1"
+                    },
+                    {
+                        id: 2,
+                        title: "post #2"
+                    }
+                ]);
+            } catch (err) {
+                console.log(err);
+            }
+        });
     });
 
-    it('typedi container', async () => {
-      expect.assertions(4);
-      let response;
+    describe("using custom container with fallback should be possible", () => {
+        beforeEach((done: DoneCallback) => {
+            const fakeContainer = {
+                services: [] as any,
 
-      try {
-        response = await axios.get('/questions');
-        expect(response.status).toEqual(HttpStatusCodes.OK);
-        expect(response.data).toEqual([
-          {
-            id: 1,
-            title: 'question #1',
-          },
-          {
-            id: 2,
-            title: 'question #2',
-          },
-        ]);
+                get(service: any): any {
+                    return this.services[service.name];
+                }
+            };
 
-        response = await axios.get('/posts');
-        expect(response.status).toEqual(HttpStatusCodes.OK);
-        expect(response.data).toEqual([
-          {
-            id: 1,
-            title: 'post #1',
-          },
-          {
-            id: 2,
-            title: 'post #2',
-          },
-        ]);
-      } catch (err) {
-        console.log(err);
-      }
-    });
-  });
+            class QuestionRepository {
+                findQuestions(): any[] {
+                    return [
+                        {
+                            id: 1,
+                            title: "question #1"
+                        },
+                        {
+                            id: 2,
+                            title: "question #2"
+                        }
+                    ];
+                }
+            }
 
-  describe('using custom container should be possible', () => {
-    beforeEach((done: DoneCallback) => {
-      const fakeContainer = {
-        services: [] as any,
+            class PostRepository {
+                findPosts(): any[] {
+                    return [
+                        {
+                            id: 1,
+                            title: "post #1"
+                        },
+                        {
+                            id: 2,
+                            title: "post #2"
+                        }
+                    ];
+                }
+            }
 
-        get(service: any): any {
-          if (!this.services[service.name]) {
-            this.services[service.name] = new service();
-          }
+            // reset metadata args storage
+            useContainer(fakeContainer, { fallback: true });
+            getMetadataArgsStorage().reset();
 
-          return this.services[service.name];
-        },
-      };
+            @JsonController()
+            class TestContainerController {
+                private questionRepository: QuestionRepository = new QuestionRepository();
+                private postRepository: PostRepository = new PostRepository();
 
-      class QuestionRepository {
-        findQuestions(): any[] {
-          return [
-            {
-              id: 1,
-              title: 'question #1',
-            },
-            {
-              id: 2,
-              title: 'question #2',
-            },
-          ];
-        }
-      }
+                @Get("/questions")
+                questions(): any[] {
+                    return this.questionRepository.findQuestions();
+                }
 
-      class PostRepository {
-        findPosts(): any[] {
-          return [
-            {
-              id: 1,
-              title: 'post #1',
-            },
-            {
-              id: 2,
-              title: 'post #2',
-            },
-          ];
-        }
-      }
+                @Get("/posts")
+                posts(): any[] {
+                    return this.postRepository.findPosts();
+                }
+            }
 
-      // reset metadata args storage
-      useContainer(fakeContainer);
-      getMetadataArgsStorage().reset();
+            @JsonController()
+            class SecondTestContainerController {
+                @Get("/photos")
+                photos(): any[] {
+                    return [
+                        {
+                            id: 1,
+                            title: "photo #1"
+                        },
+                        {
+                            id: 2,
+                            title: "photo #2"
+                        }
+                    ];
+                }
+            }
 
-      @JsonController()
-      class TestContainerController {
-        private questionRepository: QuestionRepository = new QuestionRepository();
-        private postRepository: PostRepository = new PostRepository();
+            expressServer = createExpressServer().listen(3001, done);
+        });
 
-        @Get('/questions')
-        questions(): any[] {
-          return this.questionRepository.findQuestions();
-        }
+        afterEach((done: DoneCallback) => {
+            useContainer(undefined);
+            expressServer.close(done);
+        });
 
-        @Get('/posts')
-        posts(): any[] {
-          return this.postRepository.findPosts();
-        }
-      }
+        it("custom container with fallback", async () => {
+            expect.assertions(6);
+            let response;
 
-      expressServer = createExpressServer().listen(3001, done);
-    });
+            try {
+                response = await axios.get("/questions");
+                expect(response.status).toEqual(HttpStatusCodes.OK);
+                expect(response.data).toEqual([
+                    {
+                        id: 1,
+                        title: "question #1"
+                    },
+                    {
+                        id: 2,
+                        title: "question #2"
+                    }
+                ]);
 
-    afterEach((done: DoneCallback) => {
-      useContainer(undefined);
-      expressServer.close(done);
-    });
+                response = await axios.get("/posts");
+                expect(response.status).toEqual(HttpStatusCodes.OK);
+                expect(response.data).toEqual([
+                    {
+                        id: 1,
+                        title: "post #1"
+                    },
+                    {
+                        id: 2,
+                        title: "post #2"
+                    }
+                ]);
 
-    it('custom container', async () => {
-      expect.assertions(4);
-      let response;
-
-      try {
-        response = await axios.get('/questions');
-        expect(response.status).toEqual(HttpStatusCodes.OK);
-        expect(response.data).toEqual([
-          {
-            id: 1,
-            title: 'question #1',
-          },
-          {
-            id: 2,
-            title: 'question #2',
-          },
-        ]);
-
-        response = await axios.get('/posts');
-        expect(response.status).toEqual(HttpStatusCodes.OK);
-        expect(response.data).toEqual([
-          {
-            id: 1,
-            title: 'post #1',
-          },
-          {
-            id: 2,
-            title: 'post #2',
-          },
-        ]);
-      } catch (err) {
-        console.log(err);
-      }
-    });
-  });
-
-  describe('using custom container with fallback should be possible', () => {
-    beforeEach((done: DoneCallback) => {
-      const fakeContainer = {
-        services: [] as any,
-
-        get(service: any): any {
-          return this.services[service.name];
-        },
-      };
-
-      class QuestionRepository {
-        findQuestions(): any[] {
-          return [
-            {
-              id: 1,
-              title: 'question #1',
-            },
-            {
-              id: 2,
-              title: 'question #2',
-            },
-          ];
-        }
-      }
-
-      class PostRepository {
-        findPosts(): any[] {
-          return [
-            {
-              id: 1,
-              title: 'post #1',
-            },
-            {
-              id: 2,
-              title: 'post #2',
-            },
-          ];
-        }
-      }
-
-      // reset metadata args storage
-      useContainer(fakeContainer, { fallback: true });
-      getMetadataArgsStorage().reset();
-
-      @JsonController()
-      class TestContainerController {
-        private questionRepository: QuestionRepository = new QuestionRepository();
-        private postRepository: PostRepository = new PostRepository();
-
-        @Get('/questions')
-        questions(): any[] {
-          return this.questionRepository.findQuestions();
-        }
-
-        @Get('/posts')
-        posts(): any[] {
-          return this.postRepository.findPosts();
-        }
-      }
-
-      @JsonController()
-      class SecondTestContainerController {
-        @Get('/photos')
-        photos(): any[] {
-          return [
-            {
-              id: 1,
-              title: 'photo #1',
-            },
-            {
-              id: 2,
-              title: 'photo #2',
-            },
-          ];
-        }
-      }
-
-      expressServer = createExpressServer().listen(3001, done);
+                response = await axios.get("/photos");
+                expect(response.status).toEqual(HttpStatusCodes.OK);
+                expect(response.data).toEqual([
+                    {
+                        id: 1,
+                        title: "photo #1"
+                    },
+                    {
+                        id: 2,
+                        title: "photo #2"
+                    }
+                ]);
+            } catch (err) {
+                console.log(err);
+            }
+        });
     });
 
-    afterEach((done: DoneCallback) => {
-      useContainer(undefined);
-      expressServer.close(done);
+    describe("using custom container with fallback and fallback on throw error should be possible", () => {
+        beforeEach((done: DoneCallback) => {
+            const fakeContainer = {
+                services: [] as any,
+
+                get(service: any): any {
+                    if (!this.services[service.name]) throw new Error(`Provider was not found for ${service.name}`);
+
+                    return this.services[service.name];
+                }
+            };
+
+            class QuestionRepository {
+                findQuestions(): any[] {
+                    return [
+                        {
+                            id: 1,
+                            title: "question #1"
+                        },
+                        {
+                            id: 2,
+                            title: "question #2"
+                        }
+                    ];
+                }
+            }
+            class PostRepository {
+                findPosts(): any[] {
+                    return [
+                        {
+                            id: 1,
+                            title: "post #1"
+                        },
+                        {
+                            id: 2,
+                            title: "post #2"
+                        }
+                    ];
+                }
+            }
+
+            // reset metadata args storage
+            useContainer(fakeContainer, { fallback: true, fallbackOnErrors: true });
+            getMetadataArgsStorage().reset();
+
+            @JsonController()
+            class TestContainerController {
+                private questionRepository: QuestionRepository = new QuestionRepository();
+                private postRepository: PostRepository = new PostRepository();
+
+                @Get("/questions")
+                questions(): any[] {
+                    return this.questionRepository.findQuestions();
+                }
+
+                @Get("/posts")
+                posts(): any[] {
+                    return this.postRepository.findPosts();
+                }
+            }
+
+            @JsonController()
+            class SecondTestContainerController {
+                @Get("/photos")
+                photos(): any[] {
+                    return [
+                        {
+                            id: 1,
+                            title: "photo #1"
+                        },
+                        {
+                            id: 2,
+                            title: "photo #2"
+                        }
+                    ];
+                }
+            }
+
+            // fakeContainer.services['TestContainerController'] = new TestContainerController(questionRepository, postRepository);
+            expressServer = createExpressServer().listen(3001, done);
+        });
+
+        afterEach((done: DoneCallback) => {
+            useContainer(undefined);
+            expressServer.close(done);
+        });
+
+        it("custom container with fallback and fallback on throw error", async () => {
+            expect.assertions(6);
+            let response;
+
+            try {
+                response = await axios.get("/questions");
+                expect(response.status).toEqual(HttpStatusCodes.OK);
+                expect(response.data).toEqual([
+                    {
+                        id: 1,
+                        title: "question #1"
+                    },
+                    {
+                        id: 2,
+                        title: "question #2"
+                    }
+                ]);
+
+                response = await axios.get("/posts");
+                expect(response.status).toEqual(HttpStatusCodes.OK);
+                expect(response.data).toEqual([
+                    {
+                        id: 1,
+                        title: "post #1"
+                    },
+                    {
+                        id: 2,
+                        title: "post #2"
+                    }
+                ]);
+
+                response = await axios.get("/photos");
+                expect(response.status).toEqual(HttpStatusCodes.OK);
+                expect(response.data).toEqual([
+                    {
+                        id: 1,
+                        title: "photo #1"
+                    },
+                    {
+                        id: 2,
+                        title: "photo #2"
+                    }
+                ]);
+            } catch (err) {
+                // Handle Error Here
+                console.error(err);
+            }
+        });
     });
-
-    it('custom container with fallback', async () => {
-      expect.assertions(6);
-      let response;
-
-      try {
-        response = await axios.get('/questions');
-        expect(response.status).toEqual(HttpStatusCodes.OK);
-        expect(response.data).toEqual([
-          {
-            id: 1,
-            title: 'question #1',
-          },
-          {
-            id: 2,
-            title: 'question #2',
-          },
-        ]);
-
-        response = await axios.get('/posts');
-        expect(response.status).toEqual(HttpStatusCodes.OK);
-        expect(response.data).toEqual([
-          {
-            id: 1,
-            title: 'post #1',
-          },
-          {
-            id: 2,
-            title: 'post #2',
-          },
-        ]);
-
-        response = await axios.get('/photos');
-        expect(response.status).toEqual(HttpStatusCodes.OK);
-        expect(response.data).toEqual([
-          {
-            id: 1,
-            title: 'photo #1',
-          },
-          {
-            id: 2,
-            title: 'photo #2',
-          },
-        ]);
-      } catch (err) {
-        console.log(err);
-      }
-    });
-  });
-
-  describe('using custom container with fallback and fallback on throw error should be possible', () => {
-    beforeEach((done: DoneCallback) => {
-      const fakeContainer = {
-        services: [] as any,
-
-        get(service: any): any {
-          if (!this.services[service.name]) throw new Error(`Provider was not found for ${service.name}`);
-
-          return this.services[service.name];
-        },
-      };
-
-      class QuestionRepository {
-        findQuestions(): any[] {
-          return [
-            {
-              id: 1,
-              title: 'question #1',
-            },
-            {
-              id: 2,
-              title: 'question #2',
-            },
-          ];
-        }
-      }
-      class PostRepository {
-        findPosts(): any[] {
-          return [
-            {
-              id: 1,
-              title: 'post #1',
-            },
-            {
-              id: 2,
-              title: 'post #2',
-            },
-          ];
-        }
-      }
-
-      // reset metadata args storage
-      useContainer(fakeContainer, { fallback: true, fallbackOnErrors: true });
-      getMetadataArgsStorage().reset();
-
-      @JsonController()
-      class TestContainerController {
-        private questionRepository: QuestionRepository = new QuestionRepository();
-        private postRepository: PostRepository = new PostRepository();
-
-        @Get('/questions')
-        questions(): any[] {
-          return this.questionRepository.findQuestions();
-        }
-
-        @Get('/posts')
-        posts(): any[] {
-          return this.postRepository.findPosts();
-        }
-      }
-
-      @JsonController()
-      class SecondTestContainerController {
-        @Get('/photos')
-        photos(): any[] {
-          return [
-            {
-              id: 1,
-              title: 'photo #1',
-            },
-            {
-              id: 2,
-              title: 'photo #2',
-            },
-          ];
-        }
-      }
-
-      // fakeContainer.services['TestContainerController'] = new TestContainerController(questionRepository, postRepository);
-      expressServer = createExpressServer().listen(3001, done);
-    });
-
-    afterEach((done: DoneCallback) => {
-      useContainer(undefined);
-      expressServer.close(done);
-    });
-
-    it('custom container with fallback and fallback on throw error', async () => {
-      expect.assertions(6);
-      let response;
-
-      try {
-        response = await axios.get('/questions');
-        expect(response.status).toEqual(HttpStatusCodes.OK);
-        expect(response.data).toEqual([
-          {
-            id: 1,
-            title: 'question #1',
-          },
-          {
-            id: 2,
-            title: 'question #2',
-          },
-        ]);
-
-        response = await axios.get('/posts');
-        expect(response.status).toEqual(HttpStatusCodes.OK);
-        expect(response.data).toEqual([
-          {
-            id: 1,
-            title: 'post #1',
-          },
-          {
-            id: 2,
-            title: 'post #2',
-          },
-        ]);
-
-        response = await axios.get('/photos');
-        expect(response.status).toEqual(HttpStatusCodes.OK);
-        expect(response.data).toEqual([
-          {
-            id: 1,
-            title: 'photo #1',
-          },
-          {
-            id: 2,
-            title: 'photo #2',
-          },
-        ]);
-      } catch (err) {
-        // Handle Error Here
-        console.error(err);
-      }
-    });
-  });
 });

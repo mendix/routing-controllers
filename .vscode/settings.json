@@ -13,7 +13,7 @@
     "**/dist/**": true,
     "**/src-gen/**": true,
     "**/xtend-gen/**": true,
-    "**/target/**": true,
+    "**/target/**": true
   },
   "search.exclude": {
     "**/coverage": true,
@@ -26,8 +26,10 @@
   },
   "typescript.tsdk": "./node_modules/typescript/lib",
 
+  "gitlens.blame.ignoreWhitespace": true,
+
   // Necessary to enable prettier on save. Disable in user settings to prevent this.
   "[typescript]": {
     "editor.formatOnSave": true
-  },
+  }
 }
