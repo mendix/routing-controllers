@@ -14,98 +14,99 @@ You can use routing-controllers with [express.js][1] or [koa.js][2].
 
 # Table of Contents
 
-- [Installation](#installation)
-- [Example of usage](#example-of-usage)
-- [More examples](#more-examples)
-  - [Working with json](#working-with-json)
-  - [Return promises](#return-promises)
-  - [Using Request and Response objects](#using-request-and-response-objects)
-  - [Pre-configure express/koa](#pre-configure-expresskoa)
-  - [Load all controllers from the given directory](#load-all-controllers-from-the-given-directory)
-  - [Prefix all controllers routes](#prefix-all-controllers-routes)
-  - [Prefix controller with base route](#prefix-controller-with-base-route)
-  - [Inject routing parameters](#inject-routing-parameters)
-  - [Inject query parameters](#inject-query-parameters)
-  - [Inject request body](#inject-request-body)
-  - [Inject request body parameters](#inject-request-body-parameters)
-  - [Inject request header parameters](#inject-request-header-parameters)
-  - [Inject cookie parameters](#inject-cookie-parameters)
-  - [Inject session object](#inject-session-object)
-  - [Inject state object](#inject-state-object)
-  - [Inject uploaded file](#inject-uploaded-file)
-  - [Make parameter required](#make-parameter-required)
-  - [Convert parameters to objects](#convert-parameters-to-objects)
-  - [Set custom ContentType](#set-custom-contenttype)
-  - [Set Location](#set-location)
-  - [Set Redirect](#set-redirect)
-  - [Set custom HTTP code](#set-custom-http-code)
-  - [Controlling empty responses](#controlling-empty-responses)
-  - [Set custom headers](#set-custom-headers)
-  - [Render templates](#render-templates)
-  - [Throw HTTP errors](#throw-http-errors)
-  - [Enable CORS](#enable-cors)
-  - [Default settings](#default-settings)
-  - [Selectively disabling request/response transform](#selectively-disable-requestresponse-transforming)
-- [Using middlewares](#using-middlewares)
-  - [Use exist middleware](#use-exist-middleware)
-  - [Creating your own express middleware](#creating-your-own-express-middleware)
-  - [Creating your own koa middleware](#creating-your-own-koa-middleware)
-  - [Global middlewares](#global-middlewares)
-  - [Error handlers](#error-handlers)
-  - [Loading middlewares and controllers from directories](#loading-middlewares-and-controllers-from-directories)
-- [Using interceptors](#using-interceptors)
-  - [Interceptor function](#interceptor-function)
-  - [Interceptor classes](#interceptor-classes)
-  - [Global interceptors](#global-interceptors)
-- [Creating instances of classes from action params](#creating-instances-of-classes-from-action-params)
-- [Controller inheritance](#controller-inheritance)
-- [Auto validating action params](#auto-validating-action-params)
-- [Using authorization features](#using-authorization-features)
-  - [@Authorized decorator](#authorized-decorator)
-  - [@CurrentUser decorator](#currentuser-decorator)
-- [Using DI container](#using-di-container)
-- [Custom parameter decorators](#custom-parameter-decorators)
-- [Decorators Reference](#decorators-reference)
-  - [Controller Decorators](#controller-decorators)
-  - [Controller Method Decorators](#controller-method-decorators)
-  - [Method Parameter Decorators](#method-parameter-decorators)
-  - [Middleware And Interceptor Decorators](#middleware-and-interceptor-decorators)
-  - [Other Decorators](#other-decorators)
-- [Samples](#samples)
-- [Release notes](#release-notes)
+-   [Installation](#installation)
+-   [Example of usage](#example-of-usage)
+-   [More examples](#more-examples)
+    -   [Working with json](#working-with-json)
+    -   [Return promises](#return-promises)
+    -   [Using Request and Response objects](#using-request-and-response-objects)
+    -   [Pre-configure express/koa](#pre-configure-expresskoa)
+    -   [Load all controllers from the given directory](#load-all-controllers-from-the-given-directory)
+    -   [Prefix all controllers routes](#prefix-all-controllers-routes)
+    -   [Prefix controller with base route](#prefix-controller-with-base-route)
+    -   [Inject routing parameters](#inject-routing-parameters)
+    -   [Inject query parameters](#inject-query-parameters)
+    -   [Inject request body](#inject-request-body)
+    -   [Inject request body parameters](#inject-request-body-parameters)
+    -   [Inject request header parameters](#inject-request-header-parameters)
+    -   [Inject cookie parameters](#inject-cookie-parameters)
+    -   [Inject session object](#inject-session-object)
+    -   [Inject state object](#inject-state-object)
+    -   [Inject uploaded file](#inject-uploaded-file)
+    -   [Make parameter required](#make-parameter-required)
+    -   [Convert parameters to objects](#convert-parameters-to-objects)
+    -   [Set custom ContentType](#set-custom-contenttype)
+    -   [Set Location](#set-location)
+    -   [Set Redirect](#set-redirect)
+    -   [Set custom HTTP code](#set-custom-http-code)
+    -   [Controlling empty responses](#controlling-empty-responses)
+    -   [Set custom headers](#set-custom-headers)
+    -   [Render templates](#render-templates)
+    -   [Throw HTTP errors](#throw-http-errors)
+    -   [Enable CORS](#enable-cors)
+    -   [Default settings](#default-settings)
+    -   [Selectively disabling request/response transform](#selectively-disable-requestresponse-transforming)
+-   [Using middlewares](#using-middlewares)
+    -   [Use exist middleware](#use-exist-middleware)
+    -   [Creating your own express middleware](#creating-your-own-express-middleware)
+    -   [Creating your own koa middleware](#creating-your-own-koa-middleware)
+    -   [Global middlewares](#global-middlewares)
+    -   [Error handlers](#error-handlers)
+    -   [Loading middlewares and controllers from directories](#loading-middlewares-and-controllers-from-directories)
+-   [Using interceptors](#using-interceptors)
+    -   [Interceptor function](#interceptor-function)
+    -   [Interceptor classes](#interceptor-classes)
+    -   [Global interceptors](#global-interceptors)
+-   [Creating instances of classes from action params](#creating-instances-of-classes-from-action-params)
+-   [Controller inheritance](#controller-inheritance)
+-   [Auto validating action params](#auto-validating-action-params)
+-   [Using authorization features](#using-authorization-features)
+    -   [@Authorized decorator](#authorized-decorator)
+    -   [@CurrentUser decorator](#currentuser-decorator)
+-   [Using DI container](#using-di-container)
+-   [Custom parameter decorators](#custom-parameter-decorators)
+-   [Decorators Reference](#decorators-reference)
+    -   [Controller Decorators](#controller-decorators)
+    -   [Controller Method Decorators](#controller-method-decorators)
+    -   [Method Parameter Decorators](#method-parameter-decorators)
+    -   [Middleware And Interceptor Decorators](#middleware-and-interceptor-decorators)
+    -   [Other Decorators](#other-decorators)
+-   [Samples](#samples)
+-   [Release notes](#release-notes)
 
 ## Installation
 
 1. Install module:
 
-   `npm install routing-controllers`
+    `npm install routing-controllers`
 
 2. `reflect-metadata` shim is required:
 
-   `npm install reflect-metadata`
+    `npm install reflect-metadata`
 
-   and make sure to import it before you use routing-controllers:
+    and make sure to import it before you use routing-controllers:
 
-   ```typescript
-   ```
+    ```typescript
+
+    ```
 
 3. Install framework:
 
-   **a. If you want to use routing-controllers with _express.js_, then install it and all required dependencies:**
+    **a. If you want to use routing-controllers with _express.js_, then install it and all required dependencies:**
 
-   `npm install express body-parser multer`
+    `npm install express body-parser multer`
 
-   Optionally you can also install their typings:
+    Optionally you can also install their typings:
 
-   `npm install -D @types/express @types/body-parser @types/multer`
+    `npm install -D @types/express @types/body-parser @types/multer`
 
-   **b. If you want to use routing-controllers with _koa 2_, then install it and all required dependencies:**
+    **b. If you want to use routing-controllers with _koa 2_, then install it and all required dependencies:**
 
-   `npm install koa koa-router koa-bodyparser koa-multer`
+    `npm install koa koa-router koa-bodyparser koa-multer`
 
-   Optionally you can also install their typings:
+    Optionally you can also install their typings:
 
-   `npm install -D @types/koa @types/koa-router @types/koa-bodyparser`
+    `npm install -D @types/koa @types/koa-router @types/koa-bodyparser`
 
 4. Install peer dependencies:
 
@@ -115,68 +116,68 @@ In prior versions, these were direct dependencies, but now they are peer depende
 
 5. Its important to set these options in `tsconfig.json` file of your project:
 
-   ```json
-   {
-     "emitDecoratorMetadata": true,
-     "experimentalDecorators": true
-   }
-   ```
+    ```json
+    {
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
+    }
+    ```
 
 ## Example of usage
 
 1. Create a file `UserController.ts`
 
-   ```typescript
-   import { Controller, Param, Body, Get, Post, Put, Delete } from 'routing-controllers';
+    ```typescript
+    import { Controller, Param, Body, Get, Post, Put, Delete } from "routing-controllers";
 
-   @Controller()
-   export class UserController {
-     @Get('/users')
-     getAll() {
-       return 'This action returns all users';
-     }
+    @Controller()
+    export class UserController {
+        @Get("/users")
+        getAll() {
+            return "This action returns all users";
+        }
 
-     @Get('/users/:id')
-     getOne(@Param('id') id: number) {
-       return 'This action returns user #' + id;
-     }
+        @Get("/users/:id")
+        getOne(@Param("id") id: number) {
+            return "This action returns user #" + id;
+        }
 
-     @Post('/users')
-     post(@Body() user: any) {
-       return 'Saving user...';
-     }
+        @Post("/users")
+        post(@Body() user: any) {
+            return "Saving user...";
+        }
 
-     @Put('/users/:id')
-     put(@Param('id') id: number, @Body() user: any) {
-       return 'Updating a user...';
-     }
+        @Put("/users/:id")
+        put(@Param("id") id: number, @Body() user: any) {
+            return "Updating a user...";
+        }
 
-     @Delete('/users/:id')
-     remove(@Param('id') id: number) {
-       return 'Removing user...';
-     }
-   }
-   ```
+        @Delete("/users/:id")
+        remove(@Param("id") id: number) {
+            return "Removing user...";
+        }
+    }
+    ```
 
-   This class will register routes specified in method decorators in your server framework (express.js or koa).
+    This class will register routes specified in method decorators in your server framework (express.js or koa).
 
 2. Create a file `app.ts`
 
-   ```typescript
-   // this shim is required
-   import { createExpressServer } from 'routing-controllers';
-   import { UserController } from './UserController';
+    ```typescript
+    // this shim is required
+    import { createExpressServer } from "routing-controllers";
+    import { UserController } from "./UserController";
 
-   // creates express app, registers all controller routes and returns you express app instance
-   const app = createExpressServer({
-     controllers: [UserController], // we specify controllers we want to use
-   });
+    // creates express app, registers all controller routes and returns you express app instance
+    const app = createExpressServer({
+        controllers: [UserController] // we specify controllers we want to use
+    });
 
-   // run express application on port 3000
-   app.listen(3000);
-   ```
+    // run express application on port 3000
+    app.listen(3000);
+    ```
 
-   > if you are koa user you just need to use `createKoaServer` instead of `createExpressServer`
+    > if you are koa user you just need to use `createKoaServer` instead of `createExpressServer`
 
 3. Open in browser `http://localhost:3000/users`. You will see `This action returns all users` in your browser.
    If you open `http://localhost:3000/users/1` you will see `This action returns user #1`.
@@ -192,24 +193,24 @@ and `Content-Type` header will be always set to `application/json`.
 It will also guarantee `application/json` header is understood from the requests and the body parsed as JSON:
 
 ```typescript
-import { JsonController, Param, Body, Get, Post, Put, Delete } from 'routing-controllers';
+import { JsonController, Param, Body, Get, Post, Put, Delete } from "routing-controllers";
 
 @JsonController()
 export class UserController {
-  @Get('/users')
-  getAll() {
-    return userRepository.findAll();
-  }
+    @Get("/users")
+    getAll() {
+        return userRepository.findAll();
+    }
 
-  @Get('/users/:id')
-  getOne(@Param('id') id: number) {
-    return userRepository.findById(id);
-  }
+    @Get("/users/:id")
+    getOne(@Param("id") id: number) {
+        return userRepository.findById(id);
+    }
 
-  @Post('/users')
-  post(@Body() user: User) {
-    return userRepository.insert(user);
-  }
+    @Post("/users")
+    post(@Body() user: User) {
+        return userRepository.insert(user);
+    }
 }
 ```
 
@@ -218,34 +219,34 @@ export class UserController {
 You can return a promise in the controller, and it will wait until promise resolved and return promise result in a response body.
 
 ```typescript
-import { JsonController, Param, Body, Get, Post, Put, Delete } from 'routing-controllers';
+import { JsonController, Param, Body, Get, Post, Put, Delete } from "routing-controllers";
 
 @JsonController()
 export class UserController {
-  @Get('/users')
-  getAll() {
-    return userRepository.findAll();
-  }
+    @Get("/users")
+    getAll() {
+        return userRepository.findAll();
+    }
 
-  @Get('/users/:id')
-  getOne(@Param('id') id: number) {
-    return userRepository.findById(id);
-  }
+    @Get("/users/:id")
+    getOne(@Param("id") id: number) {
+        return userRepository.findById(id);
+    }
 
-  @Post('/users')
-  post(@Body() user: User) {
-    return userRepository.insert(user);
-  }
+    @Post("/users")
+    post(@Body() user: User) {
+        return userRepository.insert(user);
+    }
 
-  @Put('/users/:id')
-  put(@Param('id') id: number, @Body() user: User) {
-    return userRepository.updateById(id, user);
-  }
+    @Put("/users/:id")
+    put(@Param("id") id: number, @Body() user: User) {
+        return userRepository.updateById(id, user);
+    }
 
-  @Delete('/users/:id')
-  remove(@Param('id') id: number) {
-    return userRepository.removeById(id);
-  }
+    @Delete("/users/:id")
+    remove(@Param("id") id: number) {
+        return userRepository.removeById(id);
+    }
 }
 ```
 
@@ -255,23 +256,23 @@ You can use framework's request and response objects directly. If you want to ha
 just make sure you return the response object itself from the action.
 
 ```typescript
-import { Controller, Req, Res, Get } from 'routing-controllers';
+import { Controller, Req, Res, Get } from "routing-controllers";
 
 @Controller()
 export class UserController {
-  @Get('/users')
-  getAllUsers(@Req() request: any, @Res() response: any) {
-    return response.send('Hello response!');
-  }
+    @Get("/users")
+    getAllUsers(@Req() request: any, @Res() response: any) {
+        return response.send("Hello response!");
+    }
 
-  @Get('/posts')
-  getAllPosts(@Req() request: any, @Res() response: any) {
-    // some response functions don't return the response object,
-    // so it needs to be returned explicitly
-    response.redirect('/users');
+    @Get("/posts")
+    getAllPosts(@Req() request: any, @Res() response: any) {
+        // some response functions don't return the response object,
+        // so it needs to be returned explicitly
+        response.redirect("/users");
 
-    return response;
-  }
+        return response;
+    }
 }
 ```
 
@@ -279,15 +280,15 @@ export class UserController {
 If you have installed typings, you can use their types:
 
 ```typescript
-import { Request, Response } from 'express';
-import { Controller, Req, Res, Get } from 'routing-controllers';
+import { Request, Response } from "express";
+import { Controller, Req, Res, Get } from "routing-controllers";
 
 @Controller()
 export class UserController {
-  @Get('/users')
-  getAll(@Req() request: Request, @Res() response: Response) {
-    return response.send('Hello response!');
-  }
+    @Get("/users")
+    getAll(@Req() request: Request, @Res() response: Response) {
+        return response.send("Hello response!");
+    }
 }
 ```
 
@@ -299,14 +300,14 @@ If you have, or if you want to create and configure express app separately,
 you can use `useExpressServer` instead of `createExpressServer` function:
 
 ```typescript
-import { useExpressServer } from 'routing-controllers';
+import { useExpressServer } from "routing-controllers";
 
-let express = require('express'); // or you can import it if you have installed typings
+let express = require("express"); // or you can import it if you have installed typings
 let app = express(); // your created express server
 // app.use() // you can configure it the way you want
 useExpressServer(app, {
-  // register created express server in routing-controllers
-  controllers: [UserController], // and configure it the way you need (controllers, validation, etc.)
+    // register created express server in routing-controllers
+    controllers: [UserController] // and configure it the way you need (controllers, validation, etc.)
 });
 app.listen(3000); // run your express server
 ```
@@ -319,11 +320,11 @@ You can load all controllers from directories, by specifying array of directorie
 `createExpressServer` or `useExpressServer`:
 
 ```typescript
-import { createExpressServer } from 'routing-controllers';
-import path from 'path';
+import { createExpressServer } from "routing-controllers";
+import path from "path";
 
 createExpressServer({
-  controllers: [path.join(__dirname + '/controllers/*.js')],
+    controllers: [path.join(__dirname + "/controllers/*.js")]
 }).listen(3000); // register controllers routes in our express application
 ```
 
@@ -334,12 +335,12 @@ createExpressServer({
 If you want to prefix all your routes, e.g. `/api` you can use `routePrefix` option:
 
 ```typescript
-import { createExpressServer } from 'routing-controllers';
-import { UserController } from './controller/UserController';
+import { createExpressServer } from "routing-controllers";
+import { UserController } from "./controller/UserController";
 
 createExpressServer({
-  routePrefix: '/api',
-  controllers: [UserController],
+    routePrefix: "/api",
+    controllers: [UserController]
 }).listen(3000);
 ```
 
@@ -350,9 +351,9 @@ createExpressServer({
 You can prefix all specific controller's actions with base route:
 
 ```typescript
-@Controller('/users')
+@Controller("/users")
 export class UserController {
-  // ...
+    // ...
 }
 ```
 
@@ -681,12 +682,12 @@ getOne(@Param("id") id: number) {
 You can also specify error class you want to use if it returned undefined:
 
 ```typescript
-import { HttpError } from 'routing-controllers';
+import { HttpError } from "routing-controllers";
 
 export class UserNotFoundError extends HttpError {
-  constructor() {
-    super(404, 'User not found!');
-  }
+    constructor() {
+        super(404, "User not found!");
+    }
 }
 ```
 
@@ -751,43 +752,43 @@ Now, when user won't be found with requested id, response will be with http stat
 
 ```json
 {
-  "name": "NotFoundError",
-  "message": "User was not found."
+    "name": "NotFoundError",
+    "message": "User was not found."
 }
 ```
 
 There are set of prepared errors you can use:
 
-- HttpError
-- BadRequestError
-- ForbiddenError
-- InternalServerError
-- MethodNotAllowedError
-- NotAcceptableError
-- NotFoundError
-- UnauthorizedError
+-   HttpError
+-   BadRequestError
+-   ForbiddenError
+-   InternalServerError
+-   MethodNotAllowedError
+-   NotAcceptableError
+-   NotFoundError
+-   UnauthorizedError
 
 You can also create and use your own errors by extending `HttpError` class.
 To define the data returned to the client, you could define a toJSON method in your error.
 
 ```typescript
 class DbError extends HttpError {
-  public operationName: string;
-  public args: any[];
+    public operationName: string;
+    public args: any[];
 
-  constructor(operationName: string, args: any[] = []) {
-    super(500);
-    Object.setPrototypeOf(this, DbError.prototype);
-    this.operationName = operationName;
-    this.args = args; // can be used for internal logging
-  }
+    constructor(operationName: string, args: any[] = []) {
+        super(500);
+        Object.setPrototypeOf(this, DbError.prototype);
+        this.operationName = operationName;
+        this.args = args; // can be used for internal logging
+    }
 
-  toJSON() {
-    return {
-      status: this.httpCode,
-      failedOperation: this.operationName,
-    };
-  }
+    toJSON() {
+        return {
+            status: this.httpCode,
+            failedOperation: this.operationName
+        };
+    }
 }
 ```
 
@@ -797,12 +798,12 @@ Since CORS is a feature that is used almost in any web-api application,
 you can enable it in routing-controllers options.
 
 ```typescript
-import { createExpressServer } from 'routing-controllers';
-import { UserController } from './UserController';
+import { createExpressServer } from "routing-controllers";
+import { UserController } from "./UserController";
 
 const app = createExpressServer({
-  cors: true,
-  controllers: [UserController],
+    cors: true,
+    controllers: [UserController]
 });
 
 app.listen(3000);
@@ -813,14 +814,14 @@ For express its `npm i cors`, for koa its `npm i kcors`.
 You can pass cors options as well:
 
 ```typescript
-import { createExpressServer } from 'routing-controllers';
-import { UserController } from './UserController';
+import { createExpressServer } from "routing-controllers";
+import { UserController } from "./UserController";
 
 const app = createExpressServer({
-  cors: {
-    // options from cors documentation
-  },
-  controllers: [UserController],
+    cors: {
+        // options from cors documentation
+    },
+    controllers: [UserController]
 });
 
 app.listen(3000);
@@ -831,22 +832,22 @@ app.listen(3000);
 You can override default status code in routing-controllers options.
 
 ```typescript
-import { createExpressServer } from 'routing-controllers';
-import { UserController } from './UserController';
+import { createExpressServer } from "routing-controllers";
+import { UserController } from "./UserController";
 
 const app = createExpressServer({
-  defaults: {
-    //with this option, null will return 404 by default
-    nullResultCode: 404,
+    defaults: {
+        //with this option, null will return 404 by default
+        nullResultCode: 404,
 
-    //with this option, void or Promise<void> will return 204 by default
-    undefinedResultCode: 204,
+        //with this option, void or Promise<void> will return 204 by default
+        undefinedResultCode: 204,
 
-    paramOptions: {
-      //with this option, argument will be required by default
-      required: true,
-    },
-  },
+        paramOptions: {
+            //with this option, argument will be required by default
+            required: true
+        }
+    }
 });
 
 app.listen(3000);
@@ -880,51 +881,51 @@ For example, lets try to use [compression](https://github.com/expressjs/compress
 1. Install compression middleware: `npm install compression`
 2. To use middleware per-action:
 
-   ```typescript
-   import { Controller, Get, UseBefore } from "routing-controllers";
-   let compression = require("compression");
+    ```typescript
+    import { Controller, Get, UseBefore } from "routing-controllers";
+    let compression = require("compression");
 
-   // ...
+    // ...
 
-   @Get("/users/:id")
-   @UseBefore(compression())
-   getOne(@Param("id") id: number) {
-       // ...
-   }
-   ```
+    @Get("/users/:id")
+    @UseBefore(compression())
+    getOne(@Param("id") id: number) {
+        // ...
+    }
+    ```
 
-   This way compression middleware will be applied only for `getOne` controller action,
-   and will be executed _before_ action execution.
-   To execute middleware _after_ action use `@UseAfter` decorator instead.
+    This way compression middleware will be applied only for `getOne` controller action,
+    and will be executed _before_ action execution.
+    To execute middleware _after_ action use `@UseAfter` decorator instead.
 
 3. To use middleware per-controller:
 
-   ```typescript
-   import { Controller, UseBefore } from 'routing-controllers';
-   let compression = require('compression');
+    ```typescript
+    import { Controller, UseBefore } from "routing-controllers";
+    let compression = require("compression");
 
-   @Controller()
-   @UseBefore(compression())
-   export class UserController {}
-   ```
+    @Controller()
+    @UseBefore(compression())
+    export class UserController {}
+    ```
 
-   This way compression middleware will be applied for all actions of the `UserController` controller,
-   and will be executed _before_ its action execution. Same way you can use `@UseAfter` decorator here.
+    This way compression middleware will be applied for all actions of the `UserController` controller,
+    and will be executed _before_ its action execution. Same way you can use `@UseAfter` decorator here.
 
 4. If you want to use compression module globally for all controllers you can simply register it during bootstrap:
 
-   ```typescript
-   import { createExpressServer } from 'routing-controllers';
-   import { UserController } from './UserController'; // we need to "load" our controller before call createExpressServer. this is required
-   let compression = require('compression');
-   let app = createExpressServer({
-     controllers: [UserController],
-   }); // creates express app, registers all controller routes and returns you express app instance
-   app.use(compression());
-   app.listen(3000); // run express application
-   ```
+    ```typescript
+    import { createExpressServer } from "routing-controllers";
+    import { UserController } from "./UserController"; // we need to "load" our controller before call createExpressServer. this is required
+    let compression = require("compression");
+    let app = createExpressServer({
+        controllers: [UserController]
+    }); // creates express app, registers all controller routes and returns you express app instance
+    app.use(compression());
+    app.listen(3000); // run express application
+    ```
 
-   Alternatively, you can create a custom [global middleware](#global-middlewares) and simply delegate its execution to the compression module.
+    Alternatively, you can create a custom [global middleware](#global-middlewares) and simply delegate its execution to the compression module.
 
 ### Creating your own express middleware
 
@@ -932,56 +933,56 @@ Here is example of creating middleware for express.js:
 
 1. There are two ways of creating middleware:
 
-   First, you can create a simple middleware function:
+    First, you can create a simple middleware function:
 
-   ```typescript
-   export function loggingMiddleware(request: any, response: any, next?: (err?: any) => any): any {
-     console.log('do something...');
-     next();
-   }
-   ```
+    ```typescript
+    export function loggingMiddleware(request: any, response: any, next?: (err?: any) => any): any {
+        console.log("do something...");
+        next();
+    }
+    ```
 
-   Second you can create a class:
+    Second you can create a class:
 
-   ```typescript
-   import { ExpressMiddlewareInterface } from 'routing-controllers';
+    ```typescript
+    import { ExpressMiddlewareInterface } from "routing-controllers";
 
-   export class MyMiddleware implements ExpressMiddlewareInterface {
-     // interface implementation is optional
+    export class MyMiddleware implements ExpressMiddlewareInterface {
+        // interface implementation is optional
 
-     use(request: any, response: any, next?: (err?: any) => any): any {
-       console.log('do something...');
-       next();
-     }
-   }
-   ```
+        use(request: any, response: any, next?: (err?: any) => any): any {
+            console.log("do something...");
+            next();
+        }
+    }
+    ```
 
 2. Then you can use them this way:
 
-   ```typescript
-   import { Controller, UseBefore } from 'routing-controllers';
-   import { MyMiddleware } from './MyMiddleware';
-   import { loggingMiddleware } from './loggingMiddleware';
+    ```typescript
+    import { Controller, UseBefore } from "routing-controllers";
+    import { MyMiddleware } from "./MyMiddleware";
+    import { loggingMiddleware } from "./loggingMiddleware";
 
-   @Controller()
-   @UseBefore(MyMiddleware)
-   @UseAfter(loggingMiddleware)
-   export class UserController {}
-   ```
+    @Controller()
+    @UseBefore(MyMiddleware)
+    @UseAfter(loggingMiddleware)
+    export class UserController {}
+    ```
 
-   or per-action:
+    or per-action:
 
-   ```typescript
-   @Get("/users/:id")
-   @UseBefore(MyMiddleware)
-   @UseAfter(loggingMiddleware)
-   getOne(@Param("id") id: number) {
-       // ...
-   }
-   ```
+    ```typescript
+    @Get("/users/:id")
+    @UseBefore(MyMiddleware)
+    @UseAfter(loggingMiddleware)
+    getOne(@Param("id") id: number) {
+        // ...
+    }
+    ```
 
-   `@UseBefore` executes middleware before controller action.
-   `@UseAfter` executes middleware after each controller action.
+    `@UseBefore` executes middleware before controller action.
+    `@UseAfter` executes middleware after each controller action.
 
 ### Creating your own koa middleware
 
@@ -989,68 +990,68 @@ Here is example of creating middleware for koa.js:
 
 1. There are two ways of creating middleware:
 
-   First, you can create a simple middleware function:
+    First, you can create a simple middleware function:
 
-   ```typescript
-   export function use(context: any, next: (err?: any) => Promise<any>): Promise<any> {
-     console.log('do something before execution...');
-     return next()
-       .then(() => {
-         console.log('do something after execution');
-       })
-       .catch(error => {
-         console.log('error handling is also here');
-       });
-   }
-   ```
+    ```typescript
+    export function use(context: any, next: (err?: any) => Promise<any>): Promise<any> {
+        console.log("do something before execution...");
+        return next()
+            .then(() => {
+                console.log("do something after execution");
+            })
+            .catch(error => {
+                console.log("error handling is also here");
+            });
+    }
+    ```
 
-   Second you can create a class:
+    Second you can create a class:
 
-   ```typescript
-   import { KoaMiddlewareInterface } from 'routing-controllers';
+    ```typescript
+    import { KoaMiddlewareInterface } from "routing-controllers";
 
-   export class MyMiddleware implements KoaMiddlewareInterface {
-     // interface implementation is optional
+    export class MyMiddleware implements KoaMiddlewareInterface {
+        // interface implementation is optional
 
-     use(context: any, next: (err?: any) => Promise<any>): Promise<any> {
-       console.log('do something before execution...');
-       return next()
-         .then(() => {
-           console.log('do something after execution');
-         })
-         .catch(error => {
-           console.log('error handling is also here');
-         });
-     }
-   }
-   ```
+        use(context: any, next: (err?: any) => Promise<any>): Promise<any> {
+            console.log("do something before execution...");
+            return next()
+                .then(() => {
+                    console.log("do something after execution");
+                })
+                .catch(error => {
+                    console.log("error handling is also here");
+                });
+        }
+    }
+    ```
 
 2. Then you can them this way:
 
-   ```typescript
-   import { Controller, UseBefore } from 'routing-controllers';
-   import { MyMiddleware } from './MyMiddleware';
-   import { loggingMiddleware } from './loggingMiddleware';
+    ```typescript
+    import { Controller, UseBefore } from "routing-controllers";
+    import { MyMiddleware } from "./MyMiddleware";
+    import { loggingMiddleware } from "./loggingMiddleware";
 
-   @Controller()
-   @UseBefore(MyMiddleware)
-   @UseAfter(loggingMiddleware)
-   export class UserController {}
-   ```
+    @Controller()
+    @UseBefore(MyMiddleware)
+    @UseAfter(loggingMiddleware)
+    export class UserController {}
+    ```
 
-   or per-action:
+    or per-action:
 
-   ```typescript
-   @Get("/users/:id")
-   @UseBefore(MyMiddleware)
-   @UseAfter(loggingMiddleware)
-   getOne(@Param("id") id: number) {
-       // ...
-   }
-   ```
+    ```typescript
+    @Get("/users/:id")
+    @UseBefore(MyMiddleware)
+    @UseAfter(loggingMiddleware)
+    getOne(@Param("id") id: number) {
+        // ...
+    }
+    ```
 
-   `@UseBefore` executes middleware before controller action.
-   `@UseAfter` executes middleware after each controller action.
+    `@UseBefore` executes middleware before controller action.
+    `@UseAfter` executes middleware after each controller action.
 
 ### Global middlewares
 
@@ -1058,27 +1059,27 @@ Global middlewares run before each request, always.
 To make your middleware global mark it with `@Middleware` decorator and specify if it runs after or before controllers actions.
 
 ```typescript
-import { Middleware, ExpressMiddlewareInterface } from 'routing-controllers';
+import { Middleware, ExpressMiddlewareInterface } from "routing-controllers";
 
-@Middleware({ type: 'before' })
+@Middleware({ type: "before" })
 export class LoggingMiddleware implements ExpressMiddlewareInterface {
-  use(request: any, response: any, next: (err: any) => any): void {
-    console.log('do something...');
-    next();
-  }
+    use(request: any, response: any, next: (err: any) => any): void {
+        console.log("do something...");
+        next();
+    }
 }
 ```
 
 To enable this middleware, specify it during routing-controllers initialization:
 
 ```typescript
-import { createExpressServer } from 'routing-controllers';
-import { UserController } from './UserController';
-import { LoggingMiddleware } from './LoggingMiddleware';
+import { createExpressServer } from "routing-controllers";
+import { UserController } from "./UserController";
+import { LoggingMiddleware } from "./LoggingMiddleware";
 
 createExpressServer({
-  controllers: [UserController],
-  middlewares: [LoggingMiddleware],
+    controllers: [UserController],
+    middlewares: [LoggingMiddleware]
 }).listen(3000);
 ```
 
@@ -1089,24 +1090,24 @@ Error handlers work same way as middlewares, but implement `ExpressErrorMiddlewa
 
 1. Create a class that implements the `ErrorMiddlewareInterface` interface:
 
-   ```typescript
-   import { Middleware, ExpressErrorMiddlewareInterface } from 'routing-controllers';
+    ```typescript
+    import { Middleware, ExpressErrorMiddlewareInterface } from "routing-controllers";
 
-   @Middleware({ type: 'after' })
-   export class CustomErrorHandler implements ExpressErrorMiddlewareInterface {
-     error(error: any, request: any, response: any, next: (err: any) => any) {
-       console.log('do something...');
-       next();
-     }
-   }
-   ```
+    @Middleware({ type: "after" })
+    export class CustomErrorHandler implements ExpressErrorMiddlewareInterface {
+        error(error: any, request: any, response: any, next: (err: any) => any) {
+            console.log("do something...");
+            next();
+        }
+    }
+    ```
 
 Custom error handlers are invoked after the default error handler, so you won't be able to change response code or headers.
 To prevent this, you have to disable default error handler by specifying `defaultErrorHandler` option in createExpressServer or useExpressServer:
 
 ```typescript
 createExpressServer({
-  defaultErrorHandler: false, // disable default error handler, only if you have your own error handler
+    defaultErrorHandler: false // disable default error handler, only if you have your own error handler
 }).listen(3000);
 ```
 
@@ -1115,13 +1116,13 @@ createExpressServer({
 Also you can load middlewares from directories. Also you can use glob patterns:
 
 ```typescript
-import { createExpressServer } from 'routing-controllers';
-import path from 'path';
+import { createExpressServer } from "routing-controllers";
+import path from "path";
 
 createExpressServer({
-  controllers: [path.join(__dirname, '/controllers/**/*.js')],
-  middlewares: [path.join(__dirname, '/middlewares/**/*.js')],
-  interceptors: [path.join(__dirname, '/interceptors/**/*.js')],
+    controllers: [path.join(__dirname, "/controllers/**/*.js")],
+    middlewares: [path.join(__dirname, "/middlewares/**/*.js")],
+    interceptors: [path.join(__dirname, "/interceptors/**/*.js")]
 }).listen(3000);
 ```
 
@@ -1159,12 +1160,12 @@ If its used per-controller then interceptor will apply to all controller actions
 You can also create a class and use it with `@UseInterceptor` decorator:
 
 ```typescript
-import { Interceptor, InterceptorInterface, Action } from 'routing-controllers';
+import { Interceptor, InterceptorInterface, Action } from "routing-controllers";
 
 export class NameCorrectionInterceptor implements InterceptorInterface {
-  intercept(action: Action, content: any) {
-    return content.replace(/Mike/gi, 'Michael');
-  }
+    intercept(action: Action, content: any) {
+        return content.replace(/Mike/gi, "Michael");
+    }
 }
 ```
 
@@ -1189,13 +1190,13 @@ You can create interceptors that will affect all controllers in your project by 
 and mark it with `@Interceptor` decorator:
 
 ```typescript
-import { Interceptor, InterceptorInterface, Action } from 'routing-controllers';
+import { Interceptor, InterceptorInterface, Action } from "routing-controllers";
 
 @Interceptor()
 export class NameCorrectionInterceptor implements InterceptorInterface {
-  intercept(action: Action, content: any) {
-    return content.replace(/Mike/gi, 'Michael');
-  }
+    intercept(action: Action, content: any) {
+        return content.replace(/Mike/gi, "Michael");
+    }
 }
 ```
 
@@ -1206,10 +1207,10 @@ You have ability to do this using [class-transformer][4].
 To use it simply specify a `classTransformer: true` option on application bootstrap:
 
 ```typescript
-import { createExpressServer } from 'routing-controllers';
+import { createExpressServer } from "routing-controllers";
 
 createExpressServer({
-  classTransformer: true,
+    classTransformer: true
 }).listen(3000);
 ```
 
@@ -1218,19 +1219,19 @@ of that instance with the data sent by a user:
 
 ```typescript
 export class User {
-  firstName: string;
-  lastName: string;
+    firstName: string;
+    lastName: string;
 
-  getName(): string {
-    return this.lastName + ' ' + this.firstName;
-  }
+    getName(): string {
+        return this.lastName + " " + this.firstName;
+    }
 }
 
 @Controller()
 export class UserController {
-  post(@Body() user: User) {
-    console.log('saving user ' + user.getName());
-  }
+    post(@Body() user: User) {
+        console.log("saving user " + user.getName());
+    }
 }
 ```
 
@@ -1253,17 +1254,17 @@ class ProductController extends AbstractControllerTemplate {}
 @Controller(`/category`)
 class CategoryController extends AbstractControllerTemplate {}
 abstract class AbstractControllerTemplate {
-  @Post()
-  public create() {}
+    @Post()
+    public create() {}
 
-  @Get()
-  public read() {}
+    @Get()
+    public read() {}
 
-  @Put()
-  public update() {}
+    @Put()
+    public update() {}
 
-  @Delete()
-  public delete() {}
+    @Delete()
+    public delete() {}
 }
 ```
 
@@ -1277,10 +1278,10 @@ E.g. `class-transformer` doesn't check whether the property's types are correct,
 It can be done easily thanks to integration with [class-validator][9]. This behaviour is **enabled** by default. If you want to disable it, you need to do it explicitly e.g. by passing `validation: false` option on application bootstrap:
 
 ```typescript
-import { createExpressServer } from 'routing-controllers';
+import { createExpressServer } from "routing-controllers";
 
 createExpressServer({
-  validation: false,
+    validation: false
 }).listen(3000);
 ```
 
@@ -1296,11 +1297,11 @@ Decorate the properties with appropriate validation decorators.
 
 ```typescript
 export class User {
-  @IsEmail()
-  email: string;
+    @IsEmail()
+    email: string;
 
-  @MinLength(6)
-  password: string;
+    @MinLength(6)
+    password: string;
 }
 ```
 
@@ -1311,11 +1312,11 @@ Now, if you have specified a class type, your action params will be not only an 
 ```typescript
 @Controller()
 export class UserController {
-  @Post('/login')
-  login(@Body() user: User) {
-    console.log(`${user.email} is for 100% sure a valid e-mail address!`);
-    console.log(`${user.password.length} is for 100% sure 6 chars or more!`);
-  }
+    @Post("/login")
+    login(@Body() user: User) {
+        console.log(`${user.email} is for 100% sure a valid e-mail address!`);
+        console.log(`${user.password.length} is for 100% sure 6 chars or more!`);
+    }
 }
 ```
 
@@ -1335,24 +1336,24 @@ Routing-controllers comes with two decorators helping you to organize authorizat
 To make `@Authorized` decorator to work you need to setup special routing-controllers options:
 
 ```typescript
-import { createExpressServer, Action } from 'routing-controllers';
+import { createExpressServer, Action } from "routing-controllers";
 
 createExpressServer({
-  authorizationChecker: async (action: Action, roles: string[]) => {
-    // here you can use request/response objects from action
-    // also if decorator defines roles it needs to access the action
-    // you can use them to provide granular access check
-    // checker must return either boolean (true or false)
-    // either promise that resolves a boolean value
-    // demo code:
-    const token = action.request.headers['authorization'];
+    authorizationChecker: async (action: Action, roles: string[]) => {
+        // here you can use request/response objects from action
+        // also if decorator defines roles it needs to access the action
+        // you can use them to provide granular access check
+        // checker must return either boolean (true or false)
+        // either promise that resolves a boolean value
+        // demo code:
+        const token = action.request.headers["authorization"];
 
-    const user = await getEntityManager().findOneByToken(User, token);
-    if (user && !roles.length) return true;
-    if (user && roles.find(role => user.roles.indexOf(role) !== -1)) return true;
+        const user = await getEntityManager().findOneByToken(User, token);
+        if (user && !roles.length) return true;
+        if (user && roles.find(role => user.roles.indexOf(role) !== -1)) return true;
 
-    return false;
-  },
+        return false;
+    }
 }).listen(3000);
 ```
 
@@ -1361,13 +1362,13 @@ You can use `@Authorized` on controller actions:
 ```typescript
 @JsonController()
 export class SomeController {
-  @Authorized()
-  @Post('/questions')
-  save(@Body() question: Question) {}
+    @Authorized()
+    @Post("/questions")
+    save(@Body() question: Question) {}
 
-  @Authorized('POST_MODERATOR') // you can specify roles or array of roles
-  @Post('/posts')
-  save(@Body() post: Post) {}
+    @Authorized("POST_MODERATOR") // you can specify roles or array of roles
+    @Post("/posts")
+    save(@Body() post: Post) {}
 }
 ```
 
@@ -1376,16 +1377,16 @@ export class SomeController {
 To make `@CurrentUser` decorator to work you need to setup special routing-controllers options:
 
 ```typescript
-import { createExpressServer, Action } from 'routing-controllers';
+import { createExpressServer, Action } from "routing-controllers";
 
 createExpressServer({
-  currentUserChecker: async (action: Action) => {
-    // here you can use request/response objects from action
-    // you need to provide a user object that will be injected in controller actions
-    // demo code:
-    const token = action.request.headers['authorization'];
-    return getEntityManager().findOneByToken(User, token);
-  },
+    currentUserChecker: async (action: Action) => {
+        // here you can use request/response objects from action
+        // you need to provide a user object that will be injected in controller actions
+        // demo code:
+        const token = action.request.headers["authorization"];
+        return getEntityManager().findOneByToken(User, token);
+    }
 }).listen(3000);
 ```
 
@@ -1394,11 +1395,11 @@ You can use `@CurrentUser` on controller actions:
 ```typescript
 @JsonController()
 export class QuestionController {
-  @Get('/questions')
-  all(@CurrentUser() user?: User, @Body() question: Question) {}
+    @Get("/questions")
+    all(@CurrentUser() user?: User, @Body() question: Question) {}
 
-  @Post('/questions')
-  save(@CurrentUser({ required: true }) user: User, @Body() post: Post) {}
+    @Post("/questions")
+    save(@CurrentUser({ required: true }) user: User, @Body() post: Post) {}
 }
 ```
 
@@ -1412,9 +1413,9 @@ middlewares and error handlers. Container must be setup during application boots
 Here is example how to integrate routing-controllers with [typedi](https://github.com/typestack/typedi):
 
 ```typescript
-import { createExpressServer, useContainer } from 'routing-controllers';
-import { Container } from 'typedi';
-import path from 'path';
+import { createExpressServer, useContainer } from "routing-controllers";
+import { Container } from "typedi";
+import path from "path";
 
 // its important to set container before any operation you do with routing-controllers,
 // including importing controllers
@@ -1422,9 +1423,9 @@ useContainer(Container);
 
 // create and run server
 createExpressServer({
-  controllers: [path.join(__dirname, '/controllers/*.js')],
-  middlewares: [path.join(__dirname, '/middlewares/*.js')],
-  interceptors: [path.join(__dirname, '/interceptors/*.js')],
+    controllers: [path.join(__dirname, "/controllers/*.js")],
+    middlewares: [path.join(__dirname, "/middlewares/*.js")],
+    interceptors: [path.join(__dirname, "/interceptors/*.js")]
 }).listen(3000);
 ```
 
@@ -1434,9 +1435,9 @@ That's it, now you can inject your services into your controllers:
 @Controller()
 @Service()
 export class UsersController {
-  constructor(private userRepository: UserRepository) {}
+    constructor(private userRepository: UserRepository) {}
 
-  // ... controller actions
+    // ... controller actions
 }
 ```
 
@@ -1446,17 +1447,17 @@ For other IoC providers that don't expose a `get(xxx)` function, you can create 
 
 ```typescript
 // inversify-adapter.ts
-import { IocAdapter } from 'routing-controllers';
-import { Container } from 'inversify';
+import { IocAdapter } from "routing-controllers";
+import { Container } from "inversify";
 
 class InversifyAdapter implements IocAdapter {
-  constructor(private readonly container: Container) {}
+    constructor(private readonly container: Container) {}
 
-  get<T>(someClass: ClassConstructor<T>, action?: Action): T {
-    const childContainer = this.container.createChild();
-    childContainer.bind(API_SYMBOLS.ClientIp).toConstantValue(action.context.ip);
-    return childContainer.resolve<T>(someClass);
-  }
+    get<T>(someClass: ClassConstructor<T>, action?: Action): T {
+        const childContainer = this.container.createChild();
+        childContainer.bind(API_SYMBOLS.ClientIp).toConstantValue(action.context.ip);
+        return childContainer.resolve<T>(someClass);
+    }
 }
 ```
 
@@ -1464,9 +1465,9 @@ And then tell Routing Controllers to use it:
 
 ```typescript
 // Somewhere in your app startup
-import { useContainer } from 'routing-controllers';
-import { Container } from 'inversify';
-import { InversifyAdapter } from './inversify-adapter.ts';
+import { useContainer } from "routing-controllers";
+import { Container } from "inversify";
+import { InversifyAdapter } from "./inversify-adapter.ts";
 
 const container = new Container();
 const inversifyAdapter = new InversifyAdapter(container);
@@ -1479,16 +1480,16 @@ You can create your own parameter decorators.
 Here is simple example how "session user" can be implemented using custom decorators:
 
 ```typescript
-import { createParamDecorator } from 'routing-controllers';
+import { createParamDecorator } from "routing-controllers";
 
 export function UserFromSession(options?: { required?: boolean }) {
-  return createParamDecorator({
-    required: options && options.required ? true : false,
-    value: action => {
-      const token = action.request.headers['authorization'];
-      return database.findUserByToken(token);
-    },
-  });
+    return createParamDecorator({
+        required: options && options.required ? true : false,
+        value: action => {
+            const token = action.request.headers["authorization"];
+            return database.findUserByToken(token);
+        }
+    });
 }
 ```
 
@@ -1497,12 +1498,12 @@ And use it in your controller:
 ```typescript
 @JsonController()
 export class QuestionController {
-  @Post()
-  save(@Body() question: Question, @UserFromSession({ required: true }) user: User) {
-    // here you'll have user authorized and you can safely save your question
-    // in the case if user returned your undefined from the database and "required"
-    // parameter was set, routing-controllers will throw you ParameterRequired error
-  }
+    @Post()
+    save(@Body() question: Question, @UserFromSession({ required: true }) user: User) {
+        // here you'll have user authorized and you can safely save your question
+        // in the case if user returned your undefined from the database and "required"
+        // parameter was set, routing-controllers will throw you ParameterRequired error
+    }
 }
 ```
 
@@ -1579,12 +1580,12 @@ export class QuestionController {
 
 ## Samples
 
-- Take a look on [routing-controllers with express](https://github.com/typestack/routing-controllers-express-demo) which is using routing-controllers.
-- Take a look on [routing-controllers with koa](https://github.com/typestack/routing-controllers-koa-demo) which is using routing-controllers.
-- Take a look on [routing-controllers with angular 2](https://github.com/typestack/routing-controllers-angular2-demo) which is using routing-controllers.
-- Take a look on [node-microservice-demo](https://github.com/swimlane/node-microservice-demo) which is using routing-controllers.
-- Take a look on samples in [./sample](https://github.com/typestack/routing-controllers/tree/master/sample) for more examples
-  of usage.
+-   Take a look on [routing-controllers with express](https://github.com/typestack/routing-controllers-express-demo) which is using routing-controllers.
+-   Take a look on [routing-controllers with koa](https://github.com/typestack/routing-controllers-koa-demo) which is using routing-controllers.
+-   Take a look on [routing-controllers with angular 2](https://github.com/typestack/routing-controllers-angular2-demo) which is using routing-controllers.
+-   Take a look on [node-microservice-demo](https://github.com/swimlane/node-microservice-demo) which is using routing-controllers.
+-   Take a look on samples in [./sample](https://github.com/typestack/routing-controllers/tree/master/sample) for more examples
+    of usage.
 
 ## Release notes
 
