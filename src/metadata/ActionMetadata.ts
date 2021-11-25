@@ -1,7 +1,7 @@
 import { Action } from "../Action";
 import { ActionMetadataArgs } from "./args/ActionMetadataArgs";
 import { ActionType } from "./types/ActionType";
-import { ClassTransformOptions } from "class-transformer";
+import { ClassTransformOptions } from "@nestjs/class-transformer";
 import { ControllerMetadata } from "./ControllerMetadata";
 import { InterceptorMetadata } from "./InterceptorMetadata";
 import { ParamMetadata } from "./ParamMetadata";

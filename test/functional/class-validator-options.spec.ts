@@ -1,6 +1,6 @@
-import { Expose } from "class-transformer";
+import { Expose } from "@nestjs/class-transformer";
 import { defaultMetadataStorage } from "class-transformer/storage";
-import { Length } from "class-validator";
+import { Length } from "@nestjs/class-validator";
 import { Server as HttpServer } from "http";
 import HttpStatusCodes from "http-status-codes";
 import qs from "qs";

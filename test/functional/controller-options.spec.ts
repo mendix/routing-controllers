@@ -1,4 +1,4 @@
-import { Exclude, Expose } from "class-transformer";
+import { Exclude, Expose } from "@nestjs/class-transformer";
 import { defaultMetadataStorage } from "class-transformer/storage";
 import { Body } from "../../src/decorator/Body";
 import { JsonController } from "../../src/decorator/JsonController";

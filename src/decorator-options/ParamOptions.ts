@@ -1,5 +1,5 @@
-import { ValidatorOptions } from "class-validator";
-import { ClassTransformOptions } from "class-transformer";
+import { ValidatorOptions } from "@nestjs/class-validator";
+import { ClassTransformOptions } from "@nestjs/class-transformer";
 
 /**
  * Extra options set to the parameter decorators.

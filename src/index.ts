@@ -5,7 +5,7 @@ import { KoaDriver } from "./driver/koa/KoaDriver";
 import { MetadataArgsStorage } from "./metadata-builder/MetadataArgsStorage";
 import { RoutingControllers } from "./RoutingControllers";
 import { RoutingControllersOptions } from "./RoutingControllersOptions";
-import { ValidationOptions } from "class-validator";
+import { ValidationOptions } from "@nestjs/class-validator";
 import { importClassesFromDirectories } from "./util/importClassesFromDirectories";
 
 // -------------------------------------------------------------------------
@@ -74,7 +74,6 @@ export * from "./http-error/UnauthorizedError";
 
 export * from "./driver/express/ExpressMiddlewareInterface";
 export * from "./driver/express/ExpressErrorMiddlewareInterface";
-export * from "./driver/koa/KoaMiddlewareInterface";
 export * from "./metadata-builder/MetadataArgsStorage";
 export * from "./metadata/ActionMetadata";
 export * from "./metadata/ControllerMetadata";

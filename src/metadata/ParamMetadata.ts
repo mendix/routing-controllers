@@ -1,8 +1,8 @@
-import { ValidatorOptions } from "class-validator";
+import { ValidatorOptions } from "@nestjs/class-validator";
 import { ActionMetadata } from "./ActionMetadata";
 import { ParamMetadataArgs } from "./args/ParamMetadataArgs";
 import { ParamType } from "./types/ParamType";
-import { ClassTransformOptions } from "class-transformer";
+import { ClassTransformOptions } from "@nestjs/class-transformer";
 import { Action } from "../Action";
 
 /**

@@ -1,5 +1,5 @@
 import bodyParser from "body-parser";
-import { IsBoolean, IsString, MaxLength, Min, ValidateNested, IsArray, IsNumber, IsDate } from "class-validator";
+import { IsBoolean, IsString, MaxLength, Min, ValidateNested, IsArray, IsNumber, IsDate } from "@nestjs/class-validator";
 import express from "express";
 import FormData from "form-data";
 import fs from "fs";
@@ -29,7 +29,7 @@ import { createExpressServer, getMetadataArgsStorage } from "../../src/index";
 import { SessionMiddleware } from "../fakes/global-options/SessionMiddleware";
 import { axios } from "../utilities/axios";
 import DoneCallback = jest.DoneCallback;
-import { Type, Transform } from "class-transformer";
+import { Type, Transform } from "@nestjs/class-transformer";
 
 describe(``, () => {
     let expressServer: HttpServer;

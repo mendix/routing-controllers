@@ -1,5 +1,5 @@
-import { ClassTransformOptions } from "class-transformer";
-import { ValidatorOptions } from "class-validator";
+import { ClassTransformOptions } from "@nestjs/class-transformer";
+import { ValidatorOptions } from "@nestjs/class-validator";
 import { AuthorizationChecker } from "./AuthorizationChecker";
 import { CurrentUserChecker } from "./CurrentUserChecker";
 

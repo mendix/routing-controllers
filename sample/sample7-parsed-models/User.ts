@@ -1,5 +1,5 @@
 import { Photo } from "./Photo";
-import { Exclude, Type } from "class-transformer";
+import { Exclude, Type } from "@nestjs/class-transformer";
 
 export class User {
     id: number;

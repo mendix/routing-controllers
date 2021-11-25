@@ -1,4 +1,4 @@
-import { Expose } from "class-transformer";
+import { Expose } from "@nestjs/class-transformer";
 import { defaultMetadataStorage } from "class-transformer/storage";
 import { Get } from "../../src/decorator/Get";
 import { JsonController } from "../../src/decorator/JsonController";

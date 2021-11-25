@@ -1,5 +1,5 @@
-import { plainToClass } from "class-transformer";
-import { validateOrReject as validate, ValidationError } from "class-validator";
+import { plainToClass } from "@nestjs/class-transformer";
+import { validateOrReject as validate, ValidationError } from "@nestjs/class-validator";
 import { Action } from "./Action";
 import { BadRequestError } from "./http-error/BadRequestError";
 import { BaseDriver } from "./driver/BaseDriver";
