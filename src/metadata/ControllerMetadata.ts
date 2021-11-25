@@ -17,8 +17,10 @@ export class ControllerMetadata {
 
     /**
      * Controller actions.
+     *
+     * Note: set after class initialisation
      */
-    actions: ActionMetadata[];
+    actions!: ActionMetadata[];
 
     /**
      * Indicates object which is used by this controller.
@@ -28,7 +30,7 @@ export class ControllerMetadata {
     /**
      * Base route for all actions registered in this controller.
      */
-    route: string;
+    route?: string;
 
     /**
      * Controller type. Can be default or json-typed. Json-typed controllers operate with json requests and responses.
@@ -42,23 +44,31 @@ export class ControllerMetadata {
 
     /**
      * Middleware "use"-s applied to a whole controller.
+     *
+     * Note: filled after class initialisation
      */
-    uses: UseMetadata[];
+    uses!: UseMetadata[];
 
     /**
      * Middleware "use"-s applied to a whole controller.
+     *
+     * Note: set after class initialisation
      */
-    interceptors: InterceptorMetadata[];
+    interceptors!: InterceptorMetadata[];
 
     /**
      * Indicates if this action uses Authorized decorator.
+     *
+     * Note: set after class initialisation
      */
-    isAuthorizedUsed: boolean;
+    isAuthorizedUsed!: boolean;
 
     /**
      * Roles set by @Authorized decorator.
+     *
+     * Note: set after class initialisation
      */
-    authorizedRoles: any[];
+    authorizedRoles!: any[];
 
     // -------------------------------------------------------------------------
     // Constructor

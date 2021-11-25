@@ -36,7 +36,7 @@ let userContainerOptions: UseContainerOptions;
 /**
  * Sets container to be used by this library.
  */
-export function useContainer(iocContainer: { get(someClass: any): any }, options?: UseContainerOptions): void {
+export function useContainer(iocContainer: { get(someClass: any): any }, options: UseContainerOptions = {}): void {
     userContainer = iocContainer;
     userContainerOptions = options;
 }

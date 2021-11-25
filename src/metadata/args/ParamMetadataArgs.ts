@@ -39,7 +39,7 @@ export interface ParamMetadataArgs {
     /**
      * Indicates if this parameter is required or not
      */
-    required: boolean;
+    required?: boolean;
 
     /**
      * Transforms the value.

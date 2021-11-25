@@ -78,10 +78,11 @@ export class MetadataBuilder {
         const controllers = !classes
             ? getMetadataArgsStorage().controllers
             : getMetadataArgsStorage().filterControllerMetadatasForClasses(classes);
+
         return controllers.map(controllerArgs => {
             const controller = new ControllerMetadata(controllerArgs);
             controller.build(this.createControllerResponseHandlers(controller));
-            controller.options = controllerArgs.options;
+            controller.options = controllerArgs.options ?? {};
             controller.actions = this.createActions(controller);
             controller.uses = this.createControllerUses(controller);
             controller.interceptors = this.createControllerInterceptorUses(controller);
@@ -93,32 +94,31 @@ export class MetadataBuilder {
      * Creates action metadatas.
      */
     protected createActions(controller: ControllerMetadata): ActionMetadata[] {
-        let target = controller.target;
         const actionsWithTarget: ActionMetadataArgs[] = [];
+
+        let target = controller.target;
         while (target) {
             const actions = getMetadataArgsStorage()
                 .filterActionsWithTarget(target)
-                .filter(action => {
-                    return actionsWithTarget.map(a => a.method).indexOf(action.method) === -1;
-                });
+                .filter(action => actionsWithTarget.map(a => a.method).indexOf(action.method) === -1);
 
-            actions.forEach(a => {
-                a.target = controller.target;
+            actions.forEach(action => {
+                action.target = controller.target;
 
-                actionsWithTarget.push(a);
+                actionsWithTarget.push(action);
             });
 
             target = Object.getPrototypeOf(target);
         }
 
         return actionsWithTarget.map(actionArgs => {
-            const action = new ActionMetadata(controller, actionArgs, this.options);
-            action.options = { ...controller.options, ...actionArgs.options };
-            action.params = this.createParams(action);
-            action.uses = this.createActionUses(action);
-            action.interceptors = this.createActionInterceptorUses(action);
-            action.build(this.createActionResponseHandlers(action));
-            return action;
+            const actionMetadata = new ActionMetadata(controller, actionArgs, this.options);
+            actionMetadata.options = { ...controller.options, ...actionArgs.options };
+            actionMetadata.params = this.createParams(actionMetadata);
+            actionMetadata.uses = this.createActionUses(actionMetadata);
+            actionMetadata.interceptors = this.createActionInterceptorUses(actionMetadata);
+            actionMetadata.build(this.createActionResponseHandlers(actionMetadata));
+            return actionMetadata;
         });
     }
 
@@ -192,7 +192,9 @@ export class MetadataBuilder {
         const options = this.options.defaults && this.options.defaults.paramOptions;
         if (!options) return paramArgs;
 
-        if (paramArgs.required === undefined) paramArgs.required = options.required || false;
+        if (paramArgs.required === undefined) {
+            paramArgs.required = options.required || false;
+        }
 
         return paramArgs;
     }

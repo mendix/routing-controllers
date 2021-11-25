@@ -92,7 +92,6 @@ export * from "./InterceptorInterface";
 
 export * from "./driver/BaseDriver";
 export * from "./driver/express/ExpressDriver";
-export * from "./driver/koa/KoaDriver";
 
 // -------------------------------------------------------------------------
 // Main Functions
@@ -103,8 +102,9 @@ export * from "./driver/koa/KoaDriver";
  * Metadata args storage follows the best practices and stores metadata in a global variable.
  */
 export function getMetadataArgsStorage(): MetadataArgsStorage {
-    if (!(global as any).routingControllersMetadataArgsStorage)
+    if (!(global as any).routingControllersMetadataArgsStorage) {
         (global as any).routingControllersMetadataArgsStorage = new MetadataArgsStorage();
+    }
 
     return (global as any).routingControllersMetadataArgsStorage;
 }
@@ -126,22 +126,6 @@ export function createExpressServer(options?: RoutingControllersOptions): any {
 }
 
 /**
- * Registers all loaded actions in your koa application.
- */
-export function useKoaServer<T>(koaApp: T, options?: RoutingControllersOptions): T {
-    const driver = new KoaDriver(koaApp);
-    return createServer(driver, options);
-}
-
-/**
- * Registers all loaded actions in your koa application.
- */
-export function createKoaServer(options?: RoutingControllersOptions): any {
-    const driver = new KoaDriver();
-    return createServer(driver, options);
-}
-
-/**
  * Registers all loaded actions in your application using selected driver.
  */
 export function createServer<T extends BaseDriver>(driver: T, options?: RoutingControllersOptions): any {
@@ -154,61 +138,47 @@ export function createServer<T extends BaseDriver>(driver: T, options?: RoutingC
  */
 export function createExecutor<T extends BaseDriver>(driver: T, options: RoutingControllersOptions = {}): void {
     // import all controllers and middlewares and error handlers (new way)
-    let controllerClasses: Function[];
-    if (options && options.controllers && options.controllers.length) {
+    let controllerClasses: Function[] = [];
+    if (options?.controllers?.length) {
         controllerClasses = (options.controllers as any[]).filter(controller => controller instanceof Function);
         const controllerDirs = (options.controllers as any[]).filter(controller => typeof controller === "string");
         controllerClasses.push(...importClassesFromDirectories(controllerDirs));
     }
-    let middlewareClasses: Function[];
-    if (options && options.middlewares && options.middlewares.length) {
+
+    let middlewareClasses: Function[] = [];
+    if (options?.middlewares?.length) {
         middlewareClasses = (options.middlewares as any[]).filter(controller => controller instanceof Function);
         const middlewareDirs = (options.middlewares as any[]).filter(controller => typeof controller === "string");
         middlewareClasses.push(...importClassesFromDirectories(middlewareDirs));
     }
-    let interceptorClasses: Function[];
-    if (options && options.interceptors && options.interceptors.length) {
-        interceptorClasses = (options.interceptors as any[]).filter(controller => controller instanceof Function);
+
+    let interceptorClasses: Function[] = [];
+    if (options?.interceptors?.length) {
+        interceptorClasses = options.interceptors?.filter(controller => controller instanceof Function) as Function[];
         const interceptorDirs = (options.interceptors as any[]).filter(controller => typeof controller === "string");
         interceptorClasses.push(...importClassesFromDirectories(interceptorDirs));
     }
 
-    if (options && options.development !== undefined) {
-        driver.developmentMode = options.development;
-    } else {
-        driver.developmentMode = process.env.NODE_ENV !== "production";
-    }
-
-    if (options.defaultErrorHandler !== undefined) {
-        driver.isDefaultErrorHandlingEnabled = options.defaultErrorHandler;
-    } else {
-        driver.isDefaultErrorHandlingEnabled = true;
-    }
-
-    if (options.classTransformer !== undefined) {
-        driver.useClassTransformer = options.classTransformer;
-    } else {
-        driver.useClassTransformer = true;
-    }
+    driver.developmentMode = options.development ?? process.env.NODE_ENV !== "production";
+    driver.isDefaultErrorHandlingEnabled = options.defaultErrorHandler ?? true;
+    driver.useClassTransformer = options.classTransformer ?? true;
 
     if (options.validation !== undefined) {
         driver.enableValidation = !!options.validation;
-        if (options.validation instanceof Object) driver.validationOptions = options.validation as ValidationOptions;
+
+        if (options.validation instanceof Object) {
+            driver.validationOptions = options.validation as ValidationOptions;
+        }
     } else {
         driver.enableValidation = true;
     }
 
     driver.classToPlainTransformOptions = options.classToPlainTransformOptions;
     driver.plainToClassTransformOptions = options.plainToClassTransformOptions;
-
-    if (options.errorOverridingMap !== undefined) driver.errorOverridingMap = options.errorOverridingMap;
-
-    if (options.routePrefix !== undefined) driver.routePrefix = options.routePrefix;
-
-    if (options.currentUserChecker !== undefined) driver.currentUserChecker = options.currentUserChecker;
-
-    if (options.authorizationChecker !== undefined) driver.authorizationChecker = options.authorizationChecker;
-
+    driver.errorOverridingMap = options.errorOverridingMap ?? {};
+    driver.routePrefix = options.routePrefix ?? "";
+    driver.currentUserChecker = options.currentUserChecker;
+    driver.authorizationChecker = options.authorizationChecker;
     driver.cors = options.cors;
 
     // next create a controller executor

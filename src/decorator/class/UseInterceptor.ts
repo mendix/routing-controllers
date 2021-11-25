@@ -18,12 +18,13 @@ export function UseInterceptor(...interceptors: Array<(action: Action, result: a
  * Must be set to controller action or controller class.
  */
 export function UseInterceptor(...interceptors: Array<Function | ((action: Action, result: any) => any)>): ClassDecorator {
-    return function (objectOrFunction: Object | Function, methodName?: string) {
+    return (objectOrFunction: Object | Function, methodName?: string) => {
         interceptors.forEach(interceptor => {
             getMetadataArgsStorage().useInterceptors.push({
                 interceptor: interceptor,
                 target: methodName ? objectOrFunction.constructor : (objectOrFunction as Function),
-                method: methodName
+                method: methodName,
+                priority: 0
             });
         });
     };

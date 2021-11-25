@@ -16,7 +16,7 @@ export class InterceptorMetadata {
     /**
      * Method used by this "use".
      */
-    method: string;
+    method?: string;
 
     /**
      * Interceptor class or function to be executed by this "use".
@@ -26,7 +26,7 @@ export class InterceptorMetadata {
     /**
      * Indicates if this interceptor is global or not.
      */
-    global: boolean;
+    global?: boolean;
 
     /**
      * Interceptor priority. Used for global interceptors.

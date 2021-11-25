@@ -17,7 +17,7 @@ export class ResponseHandlerMetadata {
     /**
      * Method on which decorator is set.
      */
-    method: string;
+    method?: string;
 
     /**
      * Property type. See ResponsePropertyMetadataType for possible values.

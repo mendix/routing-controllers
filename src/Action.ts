@@ -21,5 +21,5 @@ export interface Action {
     /**
      * "Next" function used to call next middleware.
      */
-    next?: Function;
+    next: Function;
 }

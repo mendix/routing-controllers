@@ -16,7 +16,7 @@ export class UseMetadata {
     /**
      * Method used by this "use".
      */
-    method: string;
+    method?: string;
 
     /**
      * Middleware to be executed by this "use".

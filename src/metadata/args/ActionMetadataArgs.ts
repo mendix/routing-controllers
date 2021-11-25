@@ -10,7 +10,7 @@ export interface ActionMetadataArgs {
     /**
      * Route to be registered for the action.
      */
-    route: string | RegExp;
+    route?: string | RegExp;
 
     /**
      * Class on which's method this action is attached.

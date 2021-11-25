@@ -12,7 +12,7 @@ export interface ControllerMetadataArgs {
     /**
      * Base route for all actions registered in this controller.
      */
-    route: string;
+    route?: string;
 
     /**
      * Controller type. Can be default or json-typed. Json-typed controllers operate with json requests and responses.

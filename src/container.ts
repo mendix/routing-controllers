@@ -35,7 +35,7 @@ const defaultContainer: { get<T>(someClass: ClassConstructor<T> | Function): T }
 })();
 
 let userContainer: { get<T>(someClass: ClassConstructor<T> | Function, action?: Action): T };
-let userContainerOptions: UseContainerOptions;
+let userContainerOptions: UseContainerOptions | undefined;
 
 /**
  * Allows routing controllers to resolve objects using your IoC container

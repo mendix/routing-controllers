@@ -76,7 +76,7 @@ export class ParamMetadata {
     /**
      * Transforms the value.
      */
-    transform: (action: Action, value?: any) => Promise<any> | any;
+    transform?: (action: Action, value?: any) => Promise<any> | any;
 
     /**
      * If true, string values are cast to arrays
@@ -112,9 +112,12 @@ export class ParamMetadata {
         this.extraOptions = args.extraOptions;
         this.index = args.index;
         this.type = args.type;
-        this.name = args.name;
+
+        // XXX: Some code allows this to be undefined and some doesn't. Left as is for now.
+        this.name = args.name!;
+
         this.parse = args.parse;
-        this.required = args.required;
+        this.required = args.required!;
         this.transform = args.transform;
         this.classTransform = args.classTransform;
         this.validate = args.validate;
@@ -135,6 +138,7 @@ export class ParamMetadata {
             } else if (typeof this.targetType === "string") {
                 this.targetName = this.targetType.toLowerCase();
             }
+
             this.isTargetObject = this.targetType instanceof Function || this.targetType.toLowerCase() === "object";
         }
     }

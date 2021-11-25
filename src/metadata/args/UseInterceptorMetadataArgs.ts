@@ -27,5 +27,5 @@ export interface UseInterceptorMetadataArgs {
     /**
      * Execution priority of the interceptor.
      */
-    priority?: number;
+    priority: number;
 }
