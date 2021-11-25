@@ -8,9 +8,9 @@ export function Middleware(options: { type: "after" | "before"; priority?: numbe
     return (target: Function) => {
         getMetadataArgsStorage().middlewares.push({
             target: target,
-            type: options && options.type ? options.type : "before",
+            type: options?.type ?? "before",
             global: true,
-            priority: options && options.priority !== undefined ? options.priority : 0
+            priority: options?.priority ?? 0
         });
     };
 }

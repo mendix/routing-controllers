@@ -18,7 +18,7 @@ export function Delete(route?: string, options?: HandlerOptions): SMethodDecorat
  * Registers a controller method to be executed when DELETE request comes on a given route.
  * Must be applied on a controller action.
  */
-export function Delete(route?: string | RegExp, options?: HandlerOptions): SMethodDecorator {
+export function Delete(route?: string | RegExp, options: HandlerOptions = {}): SMethodDecorator {
     return (object: Object, methodName: string) => {
         getMetadataArgsStorage().actions.push({
             type: "delete",

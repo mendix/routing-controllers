@@ -18,7 +18,7 @@ export function Patch(route?: string, options?: HandlerOptions): SMethodDecorato
  * Registers an action to be executed when PATCH request comes on a given route.
  * Must be applied on a controller action.
  */
-export function Patch(route?: string | RegExp, options?: HandlerOptions): SMethodDecorator {
+export function Patch(route?: string | RegExp, options: HandlerOptions = {}): SMethodDecorator {
     return (object: Object, methodName: string) => {
         getMetadataArgsStorage().actions.push({
             type: "patch",

@@ -15,9 +15,9 @@ export function SessionParam(propertyName: string, options?: ParamOptions): SPar
             index: index,
             name: propertyName,
             parse: false, // it makes no sense for Session object to be parsed as json
-            required: options && options.required !== undefined ? options.required : false,
-            classTransform: options && options.transform,
-            validate: options && options.validate !== undefined ? options.validate : false
+            required: options?.required ?? false,
+            classTransform: options?.transform,
+            validate: options?.validate ?? false
         });
     };
 }

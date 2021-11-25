@@ -9,7 +9,7 @@ import { ControllerOptions } from "../../decorator-options/ControllerOptions";
  * @param baseRoute Extra path you can apply as a base route to all controller actions
  * @param options Extra options that apply to all controller actions
  */
-export function Controller(baseRoute?: string, options?: ControllerOptions): ClassDecorator {
+export function Controller(baseRoute?: string, options: ControllerOptions = {}): ClassDecorator {
     return (object: Function) => {
         getMetadataArgsStorage().controllers.push({
             type: "default",

@@ -13,7 +13,7 @@ export function CurrentUser(options?: { required?: boolean }): SParameterDecorat
             method: methodName,
             index: index,
             parse: false,
-            required: options ? options.required : undefined
+            required: options?.required
         });
     };
 }

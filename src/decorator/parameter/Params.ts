@@ -14,10 +14,10 @@ export function Params(options?: ParamOptions): SParameterDecorator {
             method: methodName,
             index: index,
             parse: options?.parse ?? false,
-            required: options ? options.required : undefined,
-            classTransform: options ? options.transform : undefined,
-            explicitType: options ? options.type : undefined,
-            validate: options ? options.validate : undefined
+            required: options?.required,
+            classTransform: options?.transform,
+            explicitType: options?.type,
+            validate: options?.validate
         });
     };
 }

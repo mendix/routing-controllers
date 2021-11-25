@@ -8,7 +8,7 @@ export function Interceptor(options?: { priority?: number }): ClassDecorator {
         getMetadataArgsStorage().interceptors.push({
             target: target,
             global: true,
-            priority: options && options.priority ? options.priority : 0
+            priority: options?.priority ?? 0
         });
     };
 }

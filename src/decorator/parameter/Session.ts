@@ -14,9 +14,9 @@ export function Session(options?: ParamOptions): SParameterDecorator {
             method: methodName,
             index: index,
             parse: false, // it makes no sense for Session object to be parsed as json
-            required: options && options.required !== undefined ? options.required : true,
-            classTransform: options && options.transform,
-            validate: options && options.validate !== undefined ? options.validate : false
+            required: options?.required ?? true,
+            classTransform: options?.transform,
+            validate: options?.validate ?? false
         });
     };
 }

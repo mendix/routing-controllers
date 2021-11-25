@@ -15,8 +15,8 @@ export function UploadedFiles(name: string, options?: UploadOptions): SParameter
             index: index,
             name: name,
             parse: false,
-            required: options ? options.required : undefined,
-            extraOptions: options ? options.options : undefined
+            required: options?.required,
+            extraOptions: options?.options
         });
     };
 }

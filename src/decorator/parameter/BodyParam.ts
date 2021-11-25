@@ -15,10 +15,10 @@ export function BodyParam(name: string, options?: ParamOptions): SParameterDecor
             index: index,
             name: name,
             parse: options?.parse ?? false,
-            required: options ? options.required : undefined,
-            explicitType: options ? options.type : undefined,
-            classTransform: options ? options.transform : undefined,
-            validate: options ? options.validate : undefined
+            required: options?.required,
+            explicitType: options?.type,
+            classTransform: options?.transform,
+            validate: options?.validate
         });
     };
 }

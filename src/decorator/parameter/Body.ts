@@ -14,11 +14,11 @@ export function Body(options?: BodyOptions): SParameterDecorator {
             method: methodName,
             index: index,
             parse: false,
-            required: options ? options.required : undefined,
-            classTransform: options ? options.transform : undefined,
-            validate: options ? options.validate : undefined,
-            explicitType: options ? options.type : undefined,
-            extraOptions: options ? options.options : undefined
+            required: options?.required,
+            classTransform: options?.transform,
+            validate: options?.validate,
+            explicitType: options?.type,
+            extraOptions: options?.options
         });
     };
 }

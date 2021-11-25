@@ -18,7 +18,7 @@ export function Head(route?: string, options?: HandlerOptions): SMethodDecorator
  * Registers an action to be executed when HEAD request comes on a given route.
  * Must be applied on a controller action.
  */
-export function Head(route?: string | RegExp, options?: HandlerOptions): SMethodDecorator {
+export function Head(route?: string | RegExp, options: HandlerOptions = {}): SMethodDecorator {
     return (object: Object, methodName: string) => {
         getMetadataArgsStorage().actions.push({
             type: "head",

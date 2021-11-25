@@ -19,7 +19,7 @@ export function Method(method: ActionType, route?: string, options?: HandlerOpti
  * Registers an action to be executed when request with specified method comes on a given route.
  * Must be applied on a controller action.
  */
-export function Method(method: ActionType, route?: string | RegExp, options?: HandlerOptions): SMethodDecorator {
+export function Method(method: ActionType, route?: string | RegExp, options: HandlerOptions = {}): SMethodDecorator {
     return (object: Object, methodName: string) => {
         getMetadataArgsStorage().actions.push({
             type: method,
