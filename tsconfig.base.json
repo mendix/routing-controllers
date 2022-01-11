@@ -6,7 +6,6 @@
     "outDir": "lib/",
     "types": ["node", "jest"],
     "strict": true,
-    "noEmit": true,
     "noEmitOnError": true,
     "emitDecoratorMetadata": true,
     "noFallthroughCasesInSwitch": true,
@@ -17,6 +16,5 @@
     "newLine": "LF",
     "sourceMap": false,
     "declaration": true,
-  },
-  "include": ["src"],
+  }
 }

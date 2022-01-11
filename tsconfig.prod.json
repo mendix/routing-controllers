@@ -1,7 +1,5 @@
 {
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "strict": true,
-    "declaration": true
-  }
+  "extends": "./tsconfig.base.json",
+  "include": ["src"],
+  "exclude": ["**/*.spec.ts"]
 }
